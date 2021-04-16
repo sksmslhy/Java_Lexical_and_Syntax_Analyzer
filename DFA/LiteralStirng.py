@@ -71,7 +71,7 @@ def isLiteralString(token) :
             elif value in DOUBLE_QUOTE : 
                 locate = state[6]
             else : return False
-         
+         else : return False
     if locate == state[6]:
         return True
     else:

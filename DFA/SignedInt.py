@@ -1,8 +1,9 @@
 ZERO = ['0']
 NON_ZERO = ['1','2','3','4','5','6','7','8','9']
 MINUS = ['-']
+return_val = False
 
-def isSignedINT(token) :
+def isSignedINT(token, return_val) :
     state = ['T0', 'T1', 'T2', 'T3', 'T4', 'T5']
     locate = state[0]
     for value in token:
@@ -36,6 +37,7 @@ def isSignedINT(token) :
             elif value in NON_ZERO:
                 locate = state[5]
             else : return False
+        else : return False
     
     if locate == state[1] or locate == state[3] or locate == state[4] or locate == state[5]:
         return True
@@ -44,6 +46,6 @@ def isSignedINT(token) :
 
 
 
-token = '0'
-result = isSignedINT(token)
+token = '-'
+result = isSignedINT(token, return_val)
 print(result)

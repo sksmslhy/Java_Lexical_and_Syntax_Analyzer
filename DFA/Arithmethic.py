@@ -14,7 +14,7 @@ def isArithmetic(token):
             elif vlaue in ARITHMETIC[3] : 
                 locate = state[4]
             else : return False
-
+        else : return False
     if locate == state[1] or locate == state[2] or locate == state[3] or locate == state[4]:
         return True
     else:

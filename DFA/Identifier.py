@@ -11,9 +11,9 @@ def isID(token):
     for value in token:
         if locate == state[0]:
             if value in LETTER : 
-                locate = state[1]
-            elif value in UNDER_BAR : 
                 locate = state[2]
+            elif value in UNDER_BAR : 
+                locate = state[1]
             else : return False
         elif locate == state[1] :
             if value in ZERO : 
@@ -35,6 +35,47 @@ def isID(token):
             elif value in UNDER_BAR : 
                 locate = state[6]
             else : return False
+        elif locate == state[3] :
+            if value in ZERO : 
+                locate = state[3]
+            elif value in NON_ZERO :
+                locate = state[4]
+            elif value in LETTER : 
+                locate = state[5]
+            elif value in UNDER_BAR : 
+                locate = state[6]
+            else : return False
+        elif locate == state[4] :
+            if value in ZERO : 
+                locate = state[3]
+            elif value in NON_ZERO :
+                locate = state[4]
+            elif value in LETTER : 
+                locate = state[5]
+            elif value in UNDER_BAR : 
+                locate = state[6]
+            else : return False
+        elif locate == state[5] :
+            if value in ZERO : 
+                locate = state[3]
+            elif value in NON_ZERO :
+                locate = state[4]
+            elif value in LETTER : 
+                locate = state[5]
+            elif value in UNDER_BAR : 
+                locate = state[6]
+            else : return False
+        elif locate == state[6] :
+            if value in ZERO : 
+                locate = state[3]
+            elif value in NON_ZERO :
+                locate = state[4]
+            elif value in LETTER : 
+                locate = state[5]
+            elif value in UNDER_BAR : 
+                locate = state[6]
+            else : return False
+        else : return False
          
     if locate == state[1] or locate == state[2] or locate == state[3] or locate == state[4] or locate == state[5] or locate == state[6]:
         return True

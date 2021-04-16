@@ -32,7 +32,8 @@ def isSingleCharacter(token) :
             if value in QUOTE:
                 locate = state[5]
             else : return False
-    
+        else: return False
+
     if locate == state[5]:
         return True
     else:

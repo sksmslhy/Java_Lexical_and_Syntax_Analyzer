@@ -30,6 +30,7 @@ def isComparison(token):
             if value in COMPARISON[3] : 
                 locate = state[5]
             else : return False
+        else : return False
     if locate == state[1] or locate == state[2] or locate == state[5]:
         return True
     else:
