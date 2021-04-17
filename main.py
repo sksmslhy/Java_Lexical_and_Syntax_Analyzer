@@ -18,7 +18,7 @@ COMPARISON = ['<', '>', '!', '=']
 ASSIGN = ['=']
 QUOTE = ["'"]
 DOUBLE_QUOTE = ['"']
-SYMBOL = ['~','@','#','$','%','^','&', '?', '|', '!']
+SYMBOL = ['~','@','#','$','%','^','&','?', '!', '|']
 COMMA = [',']
 PARENS = ['(',')','[',']','{','}']
 SEMI = [';']
@@ -525,10 +525,14 @@ def tokenize(input_string: list):
                                                                     isSignedINT(temp_str),
                                                                     isSingleCharacter(temp_str),
                                                                     isOthers(temp_str)]):
-            if (count_Arith >= 1) and (count_SiINT >= 1) and (token_key[-1] in ['INT', 'ID']):
-                token = temp_str[0]
-                token_type = 'ARITHMETIC'
-            else:
+            try:
+                if (count_Arith >= 1) and (count_SiINT >= 1) and (token_key[-1] in ['INT', 'ID']):
+                    token = temp_str[0]
+                    token_type = 'ARITHMETIC'
+                else:
+                    token = temp_str
+            # - Symbol이 맨 앞에 나온 경우
+            except:
                 token = temp_str
 
         # print("\t", '---------------------------------------------')
@@ -536,22 +540,27 @@ def tokenize(input_string: list):
     # print("\t%5d   %5d   %5d   %5d   %5d   %5d   %5d" %(count_Arith, count_Compa, count_ID,
     # count_Liter, count_SiINT, count_SiChr, count_Other))
 
-    # print("\nInput :", "'"+''.join(input_string)+"'")
-
     if token == "":
         token = "NO TOKEN"
+
+    # print("\nInput :", "'"+''.join(input_string)+"'")
     # print("Output :", "'"+token+"'")
 
-    if (count_Arith >= 1) and (count_SiINT >= 1) and (token_key[-1] in ['INT', 'ID']):
-        token_value.append(token)
-        token_key.append(token_type)
-        new_test = input_string[1:]
-        tokenize(new_test)
-    else:
-        token_value.append(token)
-        token_key.append(token_type)
+    try:
+        if (count_Arith >= 1) and (count_SiINT >= 1) and (token_key[-1] in ['INT', 'ID']):
+            token = temp_str[0]
+            token_type = 'ARITHMETIC'
+            new_test = input_string[1:]
+        else:
+            new_test = input_string[count:]
+    except:
         new_test = input_string[count:]
-        tokenize(new_test)
+
+    # print("FINDME", input_string)
+
+    token_value.append(token)
+    token_key.append(token_type)
+    tokenize(new_test)
 
 
 def print_result():
