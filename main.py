@@ -7,14 +7,14 @@ if len(sys.argv) != 2:
 
 # 재귀 제한 설정
 sys.setrecursionlimit(10000000)
-    
+
 # input File 열기
 file_path = sys.argv[1]
 f = open(file_path, 'r')
 
 
 # define token & symbol
-LETTER = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+ALPHABET = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
           'w', 'x', 'y', 'z',
           'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
           'W', 'X', 'Y', 'Z']
@@ -27,11 +27,12 @@ COMPARISON = ['<', '>', '!', '=']
 ASSIGN = ['=']
 QUOTE = ["'"]
 DOUBLE_QUOTE = ['"']
-SYMBOL = ['~', '@', '#', '$', '%', '^', '&', '?', '!', '|', '\\', '.']
+SYMBOL = ['~', '@', '#', '$', '%', '^', '&', '?', '!', '|', '\\', '.', ':']
 COMMA = [',']
 PARENS = ['(', ')', '[', ']', '{', '}']
 SEMI = [';']
 WHITE_SPACE = [' ', '\t', '\n']
+LETTER = ALPHABET + SYMBOL
 OTHERS = SYMBOL + COMMA + PARENS + WHITE_SPACE + SEMI + ASSIGN
 VTYPE = ['int', 'char', 'boolean', 'String', 'void', 'byte', 'double', 'float',
          'long']
@@ -119,7 +120,7 @@ def isID(token):
     locate = state[0]
     for value in token:
         if locate == state[0]:
-            if value in LETTER:
+            if value in ALPHABET:
                 locate = state[2]
             elif value in UNDER_BAR:
                 locate = state[1]
@@ -130,7 +131,7 @@ def isID(token):
                 locate = state[3]
             elif value in NON_ZERO:
                 locate = state[4]
-            elif value in LETTER:
+            elif value in ALPHABET:
                 locate = state[5]
             elif value in UNDER_BAR:
                 locate = state[6]
@@ -141,7 +142,7 @@ def isID(token):
                 locate = state[3]
             elif value in NON_ZERO:
                 locate = state[4]
-            elif value in LETTER:
+            elif value in ALPHABET:
                 locate = state[5]
             elif value in UNDER_BAR:
                 locate = state[6]
@@ -152,7 +153,7 @@ def isID(token):
                 locate = state[3]
             elif value in NON_ZERO:
                 locate = state[4]
-            elif value in LETTER:
+            elif value in ALPHABET:
                 locate = state[5]
             elif value in UNDER_BAR:
                 locate = state[6]
@@ -163,7 +164,7 @@ def isID(token):
                 locate = state[3]
             elif value in NON_ZERO:
                 locate = state[4]
-            elif value in LETTER:
+            elif value in ALPHABET:
                 locate = state[5]
             elif value in UNDER_BAR:
                 locate = state[6]
@@ -174,7 +175,7 @@ def isID(token):
                 locate = state[3]
             elif value in NON_ZERO:
                 locate = state[4]
-            elif value in LETTER:
+            elif value in ALPHABET:
                 locate = state[5]
             elif value in UNDER_BAR:
                 locate = state[6]
@@ -185,7 +186,7 @@ def isID(token):
                 locate = state[3]
             elif value in NON_ZERO:
                 locate = state[4]
-            elif value in LETTER:
+            elif value in ALPHABET:
                 locate = state[5]
             elif value in UNDER_BAR:
                 locate = state[6]
@@ -343,7 +344,7 @@ def isSingleCharacter(token):
                 locate = state[2]
             elif value in NON_ZERO:
                 locate = state[3]
-            elif value in LETTER:
+            elif value in ALPHABET:
                 locate = state[4]
             elif value in WHITE_SPACE:
                 locate = state[5]
