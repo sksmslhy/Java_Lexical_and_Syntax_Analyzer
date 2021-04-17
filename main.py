@@ -1,3 +1,12 @@
+import sys
+
+if len(sys.argv) != 2:
+    print("Insufficient arguments")
+    sys.exit()
+
+file_path = sys.argv[1]
+f = open(file_path, 'r')
+
 LETTER = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 ZERO = ['0']
@@ -548,9 +557,13 @@ def tokenize(input_string: list):
 def print_result():
     global token_value
     global token_key
+    save = open(file_path+'_output.txt', 'w')
     for i, j in zip(token_value, token_key):
         if j != 'WHITE_SPACE':
-            print("<" + j + ",", i + ">")
+            save.write("<"+j+", "+i+">\n")
+            #print("<"+j+",", i+">")
+    print("Successfully token list saved")
+    save.close
 
 
 def process(input_str: str):
@@ -563,4 +576,5 @@ def process(input_str: str):
     tokenize(test)
     print_result()
 
-process("HI 123")
+process(f.read())
+
