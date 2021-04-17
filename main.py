@@ -9,87 +9,107 @@ if len(sys.argv) != 2:
 file_path = sys.argv[1]
 f = open(file_path, 'r')
 
-LETTER = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+
+# define token & symbol
+LETTER = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+          'w', 'x', 'y', 'z',
+          'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+          'W', 'X', 'Y', 'Z']
 ZERO = ['0']
 MINUS = ['-']
-NON_ZERO = ['1','2','3','4','5','6','7','8','9']
+NON_ZERO = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
 UNDER_BAR = ['_']
-ARITHMETIC = ['+','-','*','/']
+ARITHMETIC = ['+', '-', '*', '/']
 COMPARISON = ['<', '>', '!', '=']
 ASSIGN = ['=']
 QUOTE = ["'"]
 DOUBLE_QUOTE = ['"']
-SYMBOL = ['~','@','#','$','%','^','&','?', '!', '|']
+SYMBOL = ['~', '@', '#', '$', '%', '^', '&', '?', '!', '|', '\\']
 COMMA = [',']
-PARENS = ['(',')','[',']','{','}']
+PARENS = ['(', ')', '[', ']', '{', '}']
 SEMI = [';']
 WHITE_SPACE = [' ', '\t', '\n']
 OTHERS = SYMBOL + COMMA + PARENS + WHITE_SPACE + SEMI + ASSIGN
-VTYPE = ['int','char','boolean','String', 'void', 'byte', 'double', 'float',
-        'long']
+VTYPE = ['int', 'char', 'boolean', 'String', 'void', 'byte', 'double', 'float',
+         'long']
 KEYWORD = ['abstract', 'break', 'case', 'catch', 'class', 'continue', 'default',
            'do', 'else', 'extends', 'false', 'finally', 'for', 'if', 'implements',
            'import', 'instanceof', 'interface', 'native', 'new', 'null', 'package',
            'private', 'protected', 'public', 'return', 'short', 'static', 'super',
            'switch', 'synchronized', 'this', 'throw', 'throws', 'true', 'try', 'while', 'args', 'main']
 
+
+# DFA implementation
+# Arithmetic인지 check
 def isArithmetic(token):
+    # state 정의
     state = ['T0', 'T1', 'T2', 'T3', 'T4']
+    # 입력이 들어오면 현재 state를 start state로 지정한다.
     locate = state[0]
+    # 입력받은 token을 하나하나 state의 입력으로 받는 것을 반복한다.
     for value in token:
         if locate == state[0]:
-            if value in ARITHMETIC[0] :
+            if value in ARITHMETIC[0]:
                 locate = state[1]
-            elif value in ARITHMETIC[1] :
+            elif value in ARITHMETIC[1]:
                 locate = state[2]
-            elif value in ARITHMETIC[2] :
+            elif value in ARITHMETIC[2]:
                 locate = state[3]
-            elif value in ARITHMETIC[3] :
+            elif value in ARITHMETIC[3]:
                 locate = state[4]
-            else : return False
-        else : return False
-
+            else:
+                return False
+        else:
+            return False
+    # 입력을 다 읽은 후 현재의 state가 Arithmetic DFA의 final state면 True를, 그렇지 않으면 False를 반환한다.
     if locate == state[1] or locate == state[2] or locate == state[3] or locate == state[4]:
         return True
     else:
         return False
+
 
 def isComparison(token):
     state = ['T0', 'T1', 'T2', 'T3', 'T4', 'T5']
     locate = state[0]
     for value in token:
         if locate == state[0]:
-            if value in COMPARISON[0] :
+            if value in COMPARISON[0]:
                 locate = state[2]
-            elif value in COMPARISON[1] :
+            elif value in COMPARISON[1]:
                 locate = state[1]
-            elif value in COMPARISON[2] :
+            elif value in COMPARISON[2]:
                 locate = state[3]
-            elif value in COMPARISON[3] :
+            elif value in COMPARISON[3]:
                 locate = state[4]
-            else : return False
-        elif locate == state [1] :
-            if value in COMPARISON[3] :
+            else:
+                return False
+        elif locate == state[1]:
+            if value in COMPARISON[3]:
                 locate = state[5]
-            else : return False
-        elif locate == state [2] :
-            if value in COMPARISON[3] :
+            else:
+                return False
+        elif locate == state[2]:
+            if value in COMPARISON[3]:
                 locate = state[5]
-            else : return False
-        elif locate == state [3] :
-            if value in COMPARISON[3] :
+            else:
+                return False
+        elif locate == state[3]:
+            if value in COMPARISON[3]:
                 locate = state[5]
-            else : return False
-        elif locate == state [4] :
-            if value in COMPARISON[3] :
+            else:
+                return False
+        elif locate == state[4]:
+            if value in COMPARISON[3]:
                 locate = state[5]
-            else : return False
-        else : return False
+            else:
+                return False
+        else:
+            return False
     if locate == state[1] or locate == state[2] or locate == state[5]:
         return True
     else:
         return False
+
 
 def isID(token):
     state = ['T0', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6']
@@ -177,77 +197,86 @@ def isID(token):
     else:
         return False
 
-def isLiteralString(token) :
+
+def isLiteralString(token):
     state = ['T0', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6']
     locate = state[0]
     for value in token:
         if locate == state[0]:
-            if value in DOUBLE_QUOTE :
+            if value in DOUBLE_QUOTE:
                 locate = state[1]
-            else : return False
-        elif locate == state[1] :
-            if value in ZERO :
+            else:
+                return False
+        elif locate == state[1]:
+            if value in ZERO:
                 locate = state[2]
-            elif value in NON_ZERO :
+            elif value in NON_ZERO:
                 locate = state[3]
-            elif value in LETTER :
+            elif value in LETTER:
                 locate = state[4]
-            elif value in WHITE_SPACE :
+            elif value in WHITE_SPACE:
                 locate = state[5]
-            else : return False
-        elif locate == state[2] :
-            if value in ZERO :
+            else:
+                return False
+        elif locate == state[2]:
+            if value in ZERO:
                 locate = state[2]
-            elif value in NON_ZERO :
+            elif value in NON_ZERO:
                 locate = state[3]
-            elif value in LETTER :
+            elif value in LETTER:
                 locate = state[4]
-            elif value in WHITE_SPACE :
+            elif value in WHITE_SPACE:
                 locate = state[5]
-            elif value in DOUBLE_QUOTE :
+            elif value in DOUBLE_QUOTE:
                 locate = state[6]
-            else : return False
-        elif locate == state[3] :
-            if value in ZERO :
+            else:
+                return False
+        elif locate == state[3]:
+            if value in ZERO:
                 locate = state[2]
-            elif value in NON_ZERO :
+            elif value in NON_ZERO:
                 locate = state[3]
-            elif value in LETTER :
+            elif value in LETTER:
                 locate = state[4]
-            elif value in WHITE_SPACE :
+            elif value in WHITE_SPACE:
                 locate = state[5]
-            elif value in DOUBLE_QUOTE :
+            elif value in DOUBLE_QUOTE:
                 locate = state[6]
-            else : return False
-        elif locate == state[4] :
-            if value in ZERO :
+            else:
+                return False
+        elif locate == state[4]:
+            if value in ZERO:
                 locate = state[2]
-            elif value in NON_ZERO :
+            elif value in NON_ZERO:
                 locate = state[3]
-            elif value in LETTER :
+            elif value in LETTER:
                 locate = state[4]
-            elif value in WHITE_SPACE :
+            elif value in WHITE_SPACE:
                 locate = state[5]
-            elif value in DOUBLE_QUOTE :
+            elif value in DOUBLE_QUOTE:
                 locate = state[6]
-            else : return False
-        elif locate == state[5] :
-            if value in ZERO :
+            else:
+                return False
+        elif locate == state[5]:
+            if value in ZERO:
                 locate = state[2]
-            elif value in NON_ZERO :
+            elif value in NON_ZERO:
                 locate = state[3]
-            elif value in LETTER :
+            elif value in LETTER:
                 locate = state[4]
-            elif value in WHITE_SPACE :
+            elif value in WHITE_SPACE:
                 locate = state[5]
-            elif value in DOUBLE_QUOTE :
+            elif value in DOUBLE_QUOTE:
                 locate = state[6]
-            else : return False
-        else : return False
+            else:
+                return False
+        else:
+            return False
     if locate == state[6]:
         return True
     else:
         return False
+
 
 def isSignedINT(token):
     state = ['T0', 'T1', 'T2', 'T3', 'T4', 'T5']
@@ -296,14 +325,16 @@ def isSignedINT(token):
     else:
         return False
 
-def isSingleCharacter(token) :
+
+def isSingleCharacter(token):
     state = ['T0', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6']
     locate = state[0]
     for value in token:
         if locate == state[0]:
             if value in QUOTE:
                 locate = state[1]
-            else : return False
+            else:
+                return False
         elif locate == state[1]:
             if value in ZERO:
                 locate = state[2]
@@ -313,29 +344,36 @@ def isSingleCharacter(token) :
                 locate = state[4]
             elif value in WHITE_SPACE:
                 locate = state[5]
-            else : return False
+            else:
+                return False
         elif locate == state[2]:
             if value in QUOTE:
                 locate = state[6]
-            else : return False
+            else:
+                return False
         elif locate == state[3]:
             if value in QUOTE:
                 locate = state[6]
-            else : return False
+            else:
+                return False
         elif locate == state[4]:
             if value in QUOTE:
                 locate = state[6]
-            else : return False
+            else:
+                return False
         elif locate == state[5]:
             if value in QUOTE:
                 locate = state[6]
-            else : return False
-        else: return False
+            else:
+                return False
+        else:
+            return False
 
     if locate == state[6]:
         return True
     else:
         return False
+
 
 def isOthers(token):
     state = ['T0', 'T1']
@@ -353,6 +391,7 @@ def isOthers(token):
         return True
     else:
         return False
+
 
 ### Double Quote(")를 체크하여 List 내 Char를 결합해주는 함수
 def checkDoubleQuote(string_list: list):
@@ -377,6 +416,7 @@ def checkDoubleQuote(string_list: list):
     # List 반환
     return result
 
+
 ### Single Quote(')를 체크하여 List 내 Char를 결합해주는 함수
 def checkSingleQuote(string_list: list):
     result = []
@@ -400,6 +440,7 @@ def checkSingleQuote(string_list: list):
     # List 반환
     return result
 
+
 # Lexeme value를 저장하는 List 초기화
 token_value = []
 
@@ -408,6 +449,7 @@ token_key = []
 
 # 입력 Stream을 저장한기 위한 문자열 초기화
 initial_input = ''
+
 
 ### 입력 Stream을 받아 이를 Char 단위로 쪼개어 List 반환 ("", '' 처리 포함)
 def preProcessing(input_str: str):
@@ -421,6 +463,7 @@ def preProcessing(input_str: str):
     test = checkDoubleQuote(checkSingleQuote(test))
     # List 반환
     return test
+
 
 ### 재귀 방식으로 작동하는 tokenize 함수, List를 입력받아 최초 토큰을 반환하고 나머지 List를 재귀 함수의 Input으로 활용
 def tokenize(input_string: list):
@@ -464,7 +507,7 @@ def tokenize(input_string: list):
     # Lexeme, Token Insert을 위한 Temp value
     token = ''
     token_type = None
-    
+
     # Char List Check Count
     count = 0
 
@@ -484,7 +527,6 @@ def tokenize(input_string: list):
                 and (isSignedINT(temp_str) == False)
                 and (isSingleCharacter(temp_str) == False)
                 and (isOthers(temp_str) == False)):
-
             # print("'"+temp_str+"'", ">>REJECT<<")
             # print("\tFalse | False | False | False | False | False | False")
 
@@ -555,7 +597,7 @@ def tokenize(input_string: list):
 
             # 사전에 지정된 기호(Symbol)인 경우
             if temp_str in SYMBOL:
-                token_type = 'SYMBOR'
+                token_type = 'SYMBOL'
 
             # 사전에 지정된 콤마(Comma)인 경우
             elif temp_str in COMMA:
@@ -578,7 +620,6 @@ def tokenize(input_string: list):
                 token_type = 'ASSIGN'
         # print(isOthers(temp_str))
 
-
         # 각 Char List의 마지막 검사의 경우
         if (test_iter.index(i) == len(test_iter) - 1) and (True in [isArithmetic(temp_str),
                                                                     isComparison(temp_str),
@@ -587,12 +628,12 @@ def tokenize(input_string: list):
                                                                     isSignedINT(temp_str),
                                                                     isSingleCharacter(temp_str),
                                                                     isOthers(temp_str)]):
-            
+
             try:
                 # (-) Symbol 처리, 연산자가 될 것인지, Integer 처리할 것인지 결정
                 if (count_Arith >= 1) and (count_SiINT >= 1) and (token_key[-1] in ['INT', 'ID']):
-                    #-- Arithmatic DFA Accept 횟수와 Signed Interger DFA Accept 횟수가 모두 1 이상이고,
-                    #-- 바로 직전 Token이 Int 혹은 ID일 경우 연산자 처리
+                    # -- Arithmatic DFA Accept 횟수와 Signed Interger DFA Accept 횟수가 모두 1 이상이고,
+                    # -- 바로 직전 Token이 Int 혹은 ID일 경우 연산자 처리
                     token = temp_str[0]
                     token_type = 'ARITHMETIC'
                 else:
@@ -608,14 +649,12 @@ def tokenize(input_string: list):
     if token == "":
         token = "NO TOKEN"
 
-        
     # print("\t%5d   %5d   %5d   %5d   %5d   %5d   %5d" %(count_Arith, count_Compa, count_ID,
     # count_Liter, count_SiINT, count_SiChr, count_Other))
 
     # print("\nInput :", "'"+''.join(input_string)+"'")
     # print("Output :", "'"+token+"'")
 
-    
     # 재귀 함수의 Input이 될 새로운 Input String List를 결정
     try:
         if (count_Arith >= 1) and (count_SiINT >= 1) and (token_key[-1] in ['INT', 'ID']):
@@ -627,7 +666,7 @@ def tokenize(input_string: list):
         else:
             new_test = input_string[count:]
 
-    # (-) Symbol이 Input의 맨 앞에 나온 경우 Out of List range 예외 처리      
+    # (-) Symbol이 Input의 맨 앞에 나온 경우 Out of List range 예외 처리
     except:
         new_test = input_string[count:]
 
@@ -642,19 +681,21 @@ def tokenize(input_string: list):
     # 재귀 방식으로 나머지 Input String에 대한 Tokenize 계속 실행
     tokenize(new_test)
 
+
 ### 결과를 새로운 파일에 출력 및 저장하는 함수
 def save_result():
     global token_value
     global token_key
     # Output File에 대한 이름은 '<input_file_name>_output.txt'로 저장됨
-    save = open(file_path+'_output.txt', 'w')
+    save = open(file_path + '_output.txt', 'w')
     for i, j in zip(token_value, token_key):
         # White Space를 제외하고 저장
         if j != 'WHITE_SPACE':
-            save.write("<"+j+", "+i+">\n")
-            #print("<"+j+",", i+">")
+            save.write("<" + j + ", " + i + ">\n")
+            # print("<"+j+",", i+">")
     print("Successfully token list saved")
     save.close
+
 
 ### 전체 Lexical Analyzer Flow에 대한 Process 실행
 def process(input_str: str):
@@ -669,6 +710,7 @@ def process(input_str: str):
     tokenize(test)
     # Save Result
     save_result()
+
 
 # Command에서 받은 Code에 대한 Lexical Analize Process 호출
 process(f.read())
