@@ -5,6 +5,9 @@ if len(sys.argv) != 2:
     print("Insufficient arguments")
     sys.exit()
 
+# 재귀 제한 설정
+sys.setrecursionlimit(10000000)
+    
 # input File 열기
 file_path = sys.argv[1]
 f = open(file_path, 'r')
