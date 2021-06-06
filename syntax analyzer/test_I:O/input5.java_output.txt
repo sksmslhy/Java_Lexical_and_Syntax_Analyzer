@@ -1,0 +1,13 @@
+vtype
+id
+assign
+num
+semi
+class
+id
+lbrace
+vtype
+assign
+num
+semi
+rbrace

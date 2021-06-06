@@ -1,0 +1,17 @@
+vtype
+id
+assign
+num
+semi
+vtype
+id
+assign
+num
+semi
+vtype
+id
+assign
+id
+addsub
+id
+semi
